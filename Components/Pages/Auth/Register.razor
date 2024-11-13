@@ -1,0 +1,56 @@
+﻿@page "/auth/register"
+@using BlazorApp_Auth.Components.Pages
+@using BlazorApp_Auth.Models
+@using BlazorApp_Auth.Services
+@using Microsoft.Extensions.Logging
+@rendermode InteractiveServer
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ILogger<Register> Logger
+
+<h3>Register</h3>
+
+<EditForm Model="newUser" OnValidSubmit="HandleRegister" FormName="registerForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText id="username" class="form-control" @bind-Value="newUser.Username" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" class="form-control" @bind-Value="newUser.PasswordHash" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="newUser.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <InputText id="phoneNumber" class="form-control" @bind-Value="newUser.PhoneNumber" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@code {
+    private Users newUser = new Users();
+
+    private async Task HandleRegister()
+    {
+        try
+        {
+            await AuthService.RegisterAsync(newUser.Username, newUser.PasswordHash, newUser.Email, newUser.PhoneNumber);
+            NavigationManager.NavigateTo("/auth/login");
+        }
+        catch (Exception ex)
+        {
+            // Log the error message using ILogger
+            Logger.LogError(ex, "Error during registration");
+        }
+    }
+}

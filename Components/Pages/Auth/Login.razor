@@ -1,0 +1,55 @@
+﻿@page "/auth/login"
+@using BlazorApp_Auth.Models
+@using BlazorApp_Auth.Services
+@using Microsoft.Extensions.Logging
+@rendermode InteractiveServer
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ILogger<Login> Logger
+
+<h3>Login</h3>
+
+<EditForm Model="loginUser" OnValidSubmit="HandleLogin" FormName="loginForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText id="username" class="form-control" @bind-Value="loginUser.Username" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" class="form-control" type="password" @bind-Value="loginUser.PasswordHash" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    private Users loginUser = new Users();
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            bool isLoginSuccessful = await AuthService.LoginAsync(loginUser.Username, loginUser.PasswordHash);
+
+            if (isLoginSuccessful)
+            {
+                NavigationManager.NavigateTo("/"); // Chuyển đến trang chính sau khi đăng nhập thành công
+            }
+            else
+            {
+                // Hiển thị thông báo lỗi nếu đăng nhập thất bại
+                Logger.LogWarning("Invalid login attempt.");
+                // Bạn có thể sử dụng thêm thông báo người dùng nếu muốn (ví dụ bằng cách hiển thị thông báo lỗi ở UI)
+            }
+        }
+        catch (Exception ex)
+        {
+            // Ghi log nếu có lỗi xảy ra trong quá trình đăng nhập
+            Logger.LogError(ex, "Error during login");
+        }
+    }
+}

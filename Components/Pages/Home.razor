@@ -1,0 +1,85 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Home</PageTitle>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Hãy bắt đầu với ứng dụng của bạn!</p>
+
+    <!-- Hiển thị thông báo thành công nếu có -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">
+            @successMessage
+        </div>
+    }
+
+    <!-- Kiểm tra nếu người dùng đã đăng nhập -->
+    @if (isUserLoggedIn)
+    {
+        <p>Chào mừng bạn, @username!</p>
+
+        <!-- Nút Đăng Xuất -->
+        <button class="btn btn-danger" @onclick="Logout">Đăng Xuất</button>
+
+        <!-- Nút Xem Sản Phẩm -->
+        <button class="btn btn-secondary" @onclick="NavigateToProducts">Xem Sản Phẩm</button>
+    }
+    else
+    {
+        <!-- Nút Đăng Nhập và Đăng Ký nếu chưa đăng nhập -->
+        <div>
+            <button class="btn btn-primary" @onclick="NavigateToLogin">Đăng Nhập</button>
+            <button class="btn btn-secondary" @onclick="NavigateToRegister">Đăng Ký</button>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isUserLoggedIn;
+    private string username;
+    private string successMessage;
+
+    // Inject the AuthenticationStateProvider to track the user's login state
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    // On component initialization, check if the user is logged in
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isUserLoggedIn = authState.User.Identity.IsAuthenticated;
+
+        if (isUserLoggedIn)
+        {
+            username = authState.User.Identity.Name; // Get the username or any other claims data
+        }
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/auth/login");
+    }
+
+    private void NavigateToRegister()
+    {
+        NavigationManager.NavigateTo("/auth/register");
+    }
+
+    private void NavigateToProducts()
+    {
+        NavigationManager.NavigateTo("/Product/Index");
+    }
+
+    private async Task Logout()
+    {
+        // Call the logout functionality here (e.g., clearing cookies, tokens, etc.)
+        // For example:
+        // await AuthService.LogoutAsync();
+        isUserLoggedIn = false;
+        username = null;
+        NavigationManager.NavigateTo("/");
+    }
+}
