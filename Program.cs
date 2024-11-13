@@ -16,7 +16,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Thêm các dịch vụ cho Razor Components (nếu cần thiết)
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -26,21 +25,20 @@ builder.Services.AddMvc();
 
 var app = builder.Build();
 
-// Lấy dịch vụ UserAuthDbContext và gọi phương thức SeedData
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<UserAuthDbContext>();
-    UserAuthDbContext.SeedData(dbContext);  // Đảm bảo gọi phương thức này
+    UserAuthDbContext.SeedData(dbContext);
 }
 
 // Cấu hình đường dẫn xử lý yêu cầu HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    app.UseHsts(); // Chỉ sử dụng trong môi trường sản xuất
+    app.UseHsts();
 }
 
-app.UseHttpsRedirection(); // Chuyển hướng HTTP sang HTTPS
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();

@@ -1,8 +1,6 @@
 ﻿using BlazorApp_Auth.Models;
 using BlazorApp_Auth.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace BlazorApp_Auth.Services
 {
@@ -53,22 +51,20 @@ namespace BlazorApp_Auth.Services
             if (user == null)
                 return false; // Nếu không tìm thấy người dùng, trả về false
 
-            // So sánh mật khẩu đã mã hóa
-            var hashedPassword = HashPassword(password);
-
-            if (user.PasswordHash == hashedPassword)
-                return true; // Đăng nhập thành công
-
-            return false; // Mật khẩu không đúng
+            // Kiểm tra mật khẩu đã nhập với mật khẩu trong cơ sở dữ liệu
+            return VerifyPassword(password, user.PasswordHash); // Sử dụng VerifyPassword
         }
 
-        // Phương thức mã hóa mật khẩu
-        private string HashPassword(string password)
+        // Hàm mã hóa mật khẩu
+        private static string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hashBytes = sha256.ComputeHash(bytes);
-            return Convert.ToBase64String(hashBytes);
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        // Hàm xác minh mật khẩu
+        public static bool VerifyPassword(string enteredPassword, string storedHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHash);
         }
     }
 }
