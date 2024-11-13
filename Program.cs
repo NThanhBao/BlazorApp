@@ -26,6 +26,13 @@ builder.Services.AddMvc();
 
 var app = builder.Build();
 
+// Lấy dịch vụ UserAuthDbContext và gọi phương thức SeedData
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<UserAuthDbContext>();
+    UserAuthDbContext.SeedData(dbContext);  // Đảm bảo gọi phương thức này
+}
+
 // Cấu hình đường dẫn xử lý yêu cầu HTTP
 if (!app.Environment.IsDevelopment())
 {

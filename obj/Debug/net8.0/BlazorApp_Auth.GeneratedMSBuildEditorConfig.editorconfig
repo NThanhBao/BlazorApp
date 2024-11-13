@@ -42,6 +42,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/NTB Source Code/Dotnet/BlazorApp_Auth/BlazorApp_Auth/Components/Pages/Products/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/NTB Source Code/Dotnet/BlazorApp_Auth/BlazorApp_Auth/Components/Pages/Products/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xEZWxldGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/NTB Source Code/Dotnet/BlazorApp_Auth/BlazorApp_Auth/Components/Pages/Products/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/NTB Source Code/Dotnet/BlazorApp_Auth/BlazorApp_Auth/Components/Pages/Products/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0c1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/NTB Source Code/Dotnet/BlazorApp_Auth/BlazorApp_Auth/Components/Pages/Weather.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
