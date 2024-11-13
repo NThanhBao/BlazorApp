@@ -1,38 +1,34 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.Authorization
-
+@using DevExpress.Blazor
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedSessionStorage SessionStorage
 <PageTitle>Home</PageTitle>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Hãy bắt đầu với ứng dụng của bạn!</p>
 
-    <!-- Hiển thị thông báo thành công nếu có -->
     @if (!string.IsNullOrEmpty(successMessage))
     {
-        <div class="alert alert-success">
-            @successMessage
-        </div>
+        <DxToast Show="@true" Message="@successMessage" Type="DevExpress.Blazor.ToastMessageType.Success" />
     }
 
-    <!-- Kiểm tra nếu người dùng đã đăng nhập -->
     @if (isUserLoggedIn)
     {
-        <p>Chào mừng bạn, @username!</p>
+        <p>Chào mừng @username!</p>
+        <p>Bạn là @userRole.</p>
 
-        <!-- Nút Đăng Xuất -->
-        <button class="btn btn-danger" @onclick="Logout">Đăng Xuất</button>
+        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Danger" Text="Đăng Xuất" @onclick="Logout" />
 
-        <!-- Nút Xem Sản Phẩm -->
-        <button class="btn btn-secondary" @onclick="NavigateToProducts">Xem Sản Phẩm</button>
+        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Xem Sản Phẩm" @onclick="NavigateToProducts" />
     }
     else
     {
-        <!-- Nút Đăng Nhập và Đăng Ký nếu chưa đăng nhập -->
         <div>
-            <button class="btn btn-primary" @onclick="NavigateToLogin">Đăng Nhập</button>
-            <button class="btn btn-secondary" @onclick="NavigateToRegister">Đăng Ký</button>
+            <DxButton ButtonType="DevExpress.Blazor.ButtonType.Primary" Text="Đăng Nhập" @onclick="NavigateToLogin" />
+            <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Đăng Ký" @onclick="NavigateToRegister" />
         </div>
     }
 </div>
@@ -40,21 +36,45 @@
 @code {
     private bool isUserLoggedIn;
     private string username;
+    private string userRole;
     private string successMessage;
 
-    // Inject the AuthenticationStateProvider to track the user's login state
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
 
-    // On component initialization, check if the user is logged in
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        isUserLoggedIn = authState.User.Identity.IsAuthenticated;
+        var user = authState.User;
+
+        isUserLoggedIn = user.Identity.IsAuthenticated;
 
         if (isUserLoggedIn)
         {
-            username = authState.User.Identity.Name; // Get the username or any other claims data
+            username = user.Identity.Name;
+            userRole = user.FindFirst(c => c.Type == "UserRole")?.Value ?? "User";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var storedUsernameResult = await SessionStorage.GetAsync<string>("Username");
+            var storedRoleResult = await SessionStorage.GetAsync<string>("UserRole");
+
+            if (storedUsernameResult.Success && !string.IsNullOrEmpty(storedUsernameResult.Value))
+            {
+                isUserLoggedIn = true;
+                username = storedUsernameResult.Value;
+
+                if (storedRoleResult.Success && !string.IsNullOrEmpty(storedRoleResult.Value))
+                {
+                    userRole = storedRoleResult.Value;
+                }
+
+                StateHasChanged();
+            }
         }
     }
 
@@ -75,11 +95,13 @@
 
     private async Task Logout()
     {
-        // Call the logout functionality here (e.g., clearing cookies, tokens, etc.)
-        // For example:
-        // await AuthService.LogoutAsync();
+        await SessionStorage.DeleteAsync("Username");
+        await SessionStorage.DeleteAsync("UserRole");
+
         isUserLoggedIn = false;
         username = null;
+        userRole = null;
+
         NavigationManager.NavigateTo("/");
     }
 }

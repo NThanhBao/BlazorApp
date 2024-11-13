@@ -16,16 +16,13 @@ namespace BlazorApp_Auth.Services
         // Phương thức đăng ký người dùng
         public async Task RegisterAsync(string username, string password, string email, string phoneNumber)
         {
-            // Kiểm tra nếu tên người dùng đã tồn tại
             var existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == username);
             if (existingUser != null)
                 throw new Exception("Username already exists.");
 
-            // Mã hóa mật khẩu
             var passwordHash = HashPassword(password);
 
-            // Tạo người dùng mới
             var newUser = new Users
             {
                 Username = username,
@@ -33,10 +30,9 @@ namespace BlazorApp_Auth.Services
                 Email = email,
                 PhoneNumber = phoneNumber,
                 DateCreated = DateTime.UtcNow,
-                Role = UserRole.USER // Mặc định là USER
+                Role = UserRole.USER 
             };
 
-            // Lưu vào cơ sở dữ liệu
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
         }
@@ -44,15 +40,13 @@ namespace BlazorApp_Auth.Services
         // Phương thức đăng nhập
         public async Task<bool> LoginAsync(string username, string password)
         {
-            // Tìm người dùng trong cơ sở dữ liệu
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
-                return false; // Nếu không tìm thấy người dùng, trả về false
+                return false;
 
-            // Kiểm tra mật khẩu đã nhập với mật khẩu trong cơ sở dữ liệu
-            return VerifyPassword(password, user.PasswordHash); // Sử dụng VerifyPassword
+            return VerifyPassword(password, user.PasswordHash);
         }
 
         // Hàm mã hóa mật khẩu

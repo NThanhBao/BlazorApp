@@ -1,56 +1,122 @@
 ﻿@page "/auth/register"
-@using BlazorApp_Auth.Components.Pages
 @using BlazorApp_Auth.Models
 @using BlazorApp_Auth.Services
 @using Microsoft.Extensions.Logging
 @rendermode InteractiveServer
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
-@inject ILogger<Register> Logger
 
-<h3>Register</h3>
+<div class="card cw-480">
+    <EditForm Model="newUser"
+              OnValidSubmit="HandleRegister"
+              OnInvalidSubmit="HandleInvalidSubmit"
+              Context="EditFormContext">
+        <DataAnnotationsValidator />
+        
+        <div class="card-header text-center py-3">
+            <h4>Register</h4>
+            <p class="tm-8 mb-0 fw-normal fs-825">
+                Create a new account to see it in action
+            </p>
+        </div>
+        
+        <div class="card-body">
+            <DxFormLayout>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="tbUsername" class="d-none">Username</label>
+                    <DxTextBox @bind-Text="newUser.Username"
+                               NullText="Username"
+                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                               InputId="tbUsername" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => newUser.Username)" />
+                    </div>
+                </DxFormLayoutItem>
 
-<EditForm Model="newUser" OnValidSubmit="HandleRegister" FormName="registerForm">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="tbPassword" class="d-none">Password</label>
+                    <DxTextBox @bind-Text="newUser.PasswordHash"
+                               NullText="Password"
+                               Password="true"
+                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                               InputId="tbPassword" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => newUser.PasswordHash)" />
+                    </div>
+                </DxFormLayoutItem>
 
-    <div class="form-group">
-        <label for="username">Username</label>
-        <InputText id="username" class="form-control" @bind-Value="newUser.Username" />
-    </div>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="tbEmail" class="d-none">E-mail</label>
+                    <DxTextBox @bind-Text="newUser.Email"
+                               NullText="E-mail"
+                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                               InputId="tbEmail" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => newUser.Email)" />
+                    </div>
+                </DxFormLayoutItem>
 
-    <div class="form-group">
-        <label for="password">Password</label>
-        <InputText id="password" class="form-control" @bind-Value="newUser.PasswordHash" />
-    </div>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="miPhone" class="d-none">Phone Number</label>
+                    <DxMaskedInput @bind-Value="newUser.PhoneNumber"
+                                   NullText="Phone Number"
+                                   Mask="(999) 000-0000"
+                                   ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                                   InputId="miPhone" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => newUser.PhoneNumber)" />
+                    </div>
+                </DxFormLayoutItem>
 
-    <div class="form-group">
-        <label for="email">Email</label>
-        <InputText id="email" class="form-control" @bind-Value="newUser.Email" />
-    </div>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <DxButton CssClass="w-100"
+                              RenderStyle="ButtonRenderStyle.Primary"
+                              SubmitFormOnClick="true"
+                              Text="Register" />
+                </DxFormLayoutItem>
 
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <InputText id="phoneNumber" class="form-control" @bind-Value="newUser.PhoneNumber" />
-    </div>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <div class="text-center pt-2">
+                        <div class="tm-8">
+                            Already have an account?
+                        </div>
+                        <DxButton RenderStyle="ButtonRenderStyle.Link"
+                                  Text="Login"
+                                  Click="NavigateToLogin" />
+                    </div>
+                </DxFormLayoutItem>
+            </DxFormLayout>
+        </div>
+    </EditForm>
+</div>
 
-    <button type="submit" class="btn btn-primary">Register</button>
-</EditForm>
+<p class="tm-8 cw-480 mt-2">@FormSubmitResult</p>
 
 @code {
     private Users newUser = new Users();
+    private string FormSubmitResult = "";
 
     private async Task HandleRegister()
     {
         try
         {
             await AuthService.RegisterAsync(newUser.Username, newUser.PasswordHash, newUser.Email, newUser.PhoneNumber);
+            FormSubmitResult = "You have been registered successfully.";
             NavigationManager.NavigateTo("/auth/login");
         }
         catch (Exception ex)
         {
-            // Log the error message using ILogger
-            Logger.LogError(ex, "Error during registration");
+            FormSubmitResult = "Registration failed. Please try again.";
         }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        FormSubmitResult = "Please correct the errors and try again.";
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/auth/login");
     }
 }

@@ -1,33 +1,65 @@
 ﻿@page "/auth/login"
 @using BlazorApp_Auth.Models
 @using BlazorApp_Auth.Services
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Microsoft.Extensions.Logging
 @rendermode InteractiveServer
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 @inject ILogger<Login> Logger
+@inject ProtectedSessionStorage SessionStorage
 
-<h3>Login</h3>
-
-<EditForm Model="loginUser" OnValidSubmit="HandleLogin" FormName="loginForm">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="form-group">
-        <label for="username">Username</label>
-        <InputText id="username" class="form-control" @bind-Value="loginUser.Username" />
-    </div>
-
-    <div class="form-group">
-        <label for="password">Password</label>
-        <InputText id="password" class="form-control" type="password" @bind-Value="loginUser.PasswordHash" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Login</button>
-</EditForm>
+<div class="card cw-480">
+    <EditForm Model="loginUser" OnValidSubmit="HandleLogin" Context="EditFormContext">
+        <DataAnnotationsValidator />
+        <div class="card-header text-center py-3">
+            <h4>Welcome</h4>
+            <p class="tm-8 mb-0 fw-normal fs-825">
+                Log in to see it in action
+            </p>
+        </div>
+        <div class="card-body">
+            <DxFormLayout>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="username" class="d-none">Username</label>
+                    <DxTextBox @bind-Text="loginUser.Username" NullText="Username"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="username" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => loginUser.Username)" />
+                    </div>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <label for="password" class="d-none">Password</label>
+                    <DxTextBox @bind-Text="loginUser.PasswordHash" NullText="Password" Password="true"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="password" />
+                    <div class="text-danger">
+                        <ValidationMessage For="@(() => loginUser.PasswordHash)" />
+                    </div>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <DxButton CssClass="w-100" Text="Login" RenderStyle="ButtonRenderStyle.Primary"
+                        SubmitFormOnClick="true" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <div class="text-center pt-2">
+                        <div class="tm-8 fs-825">
+                            Do not have an account?
+                        </div>
+                        <DxButton Text="Create an account" RenderStyle="ButtonRenderStyle.Link"
+                            Click="GotoRegistrationFormClick" />
+                    </div>
+                </DxFormLayoutItem>
+            </DxFormLayout>
+        </div>
+    </EditForm>
+</div>
+<p class="tm-8 cw-480 mt-2">
+    @FormSubmitResult
+</p>
 
 @code {
     private Users loginUser = new Users();
+    string FormSubmitResult = "";
 
     private async Task HandleLogin()
     {
@@ -37,19 +69,29 @@
 
             if (isLoginSuccessful)
             {
-                NavigationManager.NavigateTo("/"); // Chuyển đến trang chính sau khi đăng nhập thành công
+                // Lưu thông tin vào session
+                await SessionStorage.SetAsync("Username", loginUser.Username);
+                await SessionStorage.SetAsync("UserRole", loginUser.Role.ToString());
+
+                NavigationManager.NavigateTo("/"); 
+                FormSubmitResult = "You have been logged in successfully.";
             }
             else
             {
-                // Hiển thị thông báo lỗi nếu đăng nhập thất bại
                 Logger.LogWarning("Invalid login attempt.");
-                // Bạn có thể sử dụng thêm thông báo người dùng nếu muốn (ví dụ bằng cách hiển thị thông báo lỗi ở UI)
+                FormSubmitResult = "Invalid username or password.";
             }
         }
         catch (Exception ex)
         {
-            // Ghi log nếu có lỗi xảy ra trong quá trình đăng nhập
             Logger.LogError(ex, "Error during login");
+            FormSubmitResult = "An error occurred. Please try again.";
         }
+    }
+
+    async Task GotoRegistrationFormClick()
+    {
+        FormSubmitResult = "";
+        NavigationManager.NavigateTo("/auth/register"); // Redirect to registration form
     }
 }
