@@ -155,3 +155,5 @@ E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\obj\Debug\net8.0\BlazorA
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\obj\Debug\net8.0\BlazorApp_Auth.genruntimeconfig.cache
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\obj\Debug\net8.0\ref\BlazorApp_Auth.dll
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\obj\Debug\net8.0\BlazorApp_Auth.sourcelink.json
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Blazored.LocalStorage.dll
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Blazored.SessionStorage.dll

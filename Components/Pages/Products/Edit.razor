@@ -1,0 +1,80 @@
+@page "/products/edit-product/{id:int}"
+@rendermode InteractiveServer
+@using BlazorApp_Auth.Models
+@using BlazorApp_Auth.Services
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Chỉnh Sửa Sản Phẩm</PageTitle>
+
+<h3>Chỉnh Sửa Sản Phẩm</h3>
+
+@if (product == null)
+{
+    <p>Đang tải sản phẩm...</p>
+}
+else
+{
+    <EditForm Model="@product" OnValidSubmit="HandleValidSubmit" FormName="productForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="id">ID Sản Phẩm</label>
+            <label class="form-control">@product.Id</label>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Tên Sản Phẩm</label>
+            <InputText id="name" class="form-control" @bind-Value="product.Name" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Mô Tả</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="product.Description" />
+        </div>
+
+        <div class="form-group">
+            <label for="price">Giá</label>
+            <InputNumber id="price" class="form-control" @bind-Value="product.Price" />
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Số Lượng</label>
+            <InputNumber id="quantity" class="form-control" @bind-Value="product.Quantity" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" @onclick="CancelEdit">Hủy</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int id { get; set; } // Lấy ID từ URL
+    private Products product;
+
+    // Lấy sản phẩm theo ID khi trang được tải
+    protected override async Task OnInitializedAsync()
+    {
+        // Kiểm tra sản phẩm và xử lý trường hợp không tìm thấy sản phẩm
+        product = await ProductService.GetProductByIdAsync(id);
+        if (product == null)
+        {
+            // Nếu không tìm thấy sản phẩm, chuyển hướng về trang danh sách
+            NavigationManager.NavigateTo("/products");
+        }
+    }
+
+    // Xử lý khi người dùng nhấn nút lưu
+    private async Task HandleValidSubmit()
+    {
+        await ProductService.EditProductAsync(product);
+        NavigationManager.NavigateTo("/products"); // Điều hướng về trang danh sách sản phẩm sau khi lưu
+    }
+
+    // Hủy chỉnh sửa và quay lại trang danh sách sản phẩm
+    private void CancelEdit()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}

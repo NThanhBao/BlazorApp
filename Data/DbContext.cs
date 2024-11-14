@@ -25,7 +25,6 @@ namespace BlazorApp_Auth.Data
 
         public static void SeedData(UserAuthDbContext context)
         {
-            // Kiểm tra xem có dữ liệu trong bảng Users chưa
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
@@ -51,15 +50,46 @@ namespace BlazorApp_Auth.Data
 
                 context.SaveChanges();
             }
+
+            // Seed Products if none exist
+            if (!context.Products.Any())
+            {
+                context.Products.AddRange(
+                    new Products
+                    {
+                        Name = "Sản phẩm A",
+                        Price = 100.00m,
+                        Description = "Mô tả sản phẩm A",
+                        Quantity = 10,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Products
+                    {
+                        Name = "Sản phẩm B",
+                        Price = 200.00m,
+                        Description = "Mô tả sản phẩm B",
+                        Quantity = 20,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Products
+                    {
+                        Name = "Sản phẩm C",
+                        Price = 300.00m,
+                        Description = "Mô tả sản phẩm C",
+                        Quantity = 30,
+                        CreatedAt = DateTime.UtcNow
+                    }
+                );
+
+                context.SaveChanges();
+            }
         }
 
-        // Hàm mã hóa mật khẩu
         private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        // Hàm xác minh mật khẩu
         public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
             return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHash);

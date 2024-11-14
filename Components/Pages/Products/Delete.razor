@@ -1,0 +1,58 @@
+@page "/products/delete-product/{id:int}"
+@rendermode InteractiveServer
+@using BlazorApp_Auth.Models
+@using BlazorApp_Auth.Services
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Xóa Sản Phẩm</PageTitle>
+
+<h3>Xóa Sản Phẩm</h3>
+
+@if (product == null)
+{
+    <p>Đang tải sản phẩm...</p>
+}
+else
+{
+    <p>Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+    <div>
+        <p><strong>Tên sản phẩm:</strong> @product.Name</p>
+        <p><strong>Mô tả:</strong> @product.Description</p>
+        <p><strong>Giá:</strong> @product.Price.ToString("C")</p>
+        <p><strong>Số lượng:</strong> @product.Quantity</p>
+    </div>
+
+    <!-- Confirmation buttons -->
+    <button class="btn btn-danger" @onclick="DeleteProduct">Xóa</button>
+    <button class="btn btn-secondary" @onclick="CancelDelete">Hủy</button>
+}
+
+@code {
+    [Parameter] public int id { get; set; } // Get ID from URL
+    private Products product;
+
+    // Fetch the product by ID when the page is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductService.GetProductByIdAsync(id);
+        if (product == null)
+        {
+            // Redirect to the products list if the product doesn't exist
+            NavigationManager.NavigateTo("/products");
+        }
+    }
+
+    // Handle the delete action
+    private async Task DeleteProduct()
+    {
+        await ProductService.DeleteProductAsync(id); // Delete the product
+        NavigationManager.NavigateTo("/products"); // Redirect to the products list
+    }
+
+    // Handle the cancel action (go back to the products list)
+    private void CancelDelete()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}

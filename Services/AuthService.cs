@@ -38,15 +38,17 @@ namespace BlazorApp_Auth.Services
         }
 
         // Phương thức đăng nhập
-        public async Task<bool> LoginAsync(string username, string password)
+        public async Task<(bool, UserRole)> LoginAsync(string username, string password)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == null)
-                return false;
+            if (user != null && VerifyPassword(password, user.PasswordHash))
+            {
+                return (true, user.Role); // Return true and the role of the user
+            }
 
-            return VerifyPassword(password, user.PasswordHash);
+            return (false, UserRole.USER); // Return false if login fails
         }
 
         // Hàm mã hóa mật khẩu

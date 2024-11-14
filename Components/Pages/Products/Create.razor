@@ -1,0 +1,82 @@
+@page "/products/create-product"
+@rendermode InteractiveServer
+@inject IProductService ProductService
+@using BlazorApp_Auth.Models
+@using BlazorApp_Auth.Services
+@inject NavigationManager NavigationManager
+
+<h3>Thêm sản phẩm</h3>
+
+<EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @if (validationErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @validationErrorMessage
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="name">Tên sản phẩm</label>
+        <InputText id="name" class="form-control" @bind-Value="newProduct.Name" />
+        <ValidationMessage For="@(() => newProduct.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label for="price">Giá</label>
+        <InputNumber id="price" class="form-control" @bind-Value="newProduct.Price" />
+        <ValidationMessage For="@(() => newProduct.Price)" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Mô tả</label>
+        <InputText id="description" class="form-control" @bind-Value="newProduct.Description" />
+        <ValidationMessage For="@(() => newProduct.Description)" />
+    </div>
+
+    <div class="form-group">
+        <label for="quantity">Số lượng</label>
+        <InputNumber id="quantity" class="form-control" @bind-Value="newProduct.Quantity" />
+        <ValidationMessage For="@(() => newProduct.Quantity)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm</button>
+</EditForm>
+
+@code {
+    private Products newProduct = new Products();
+    private string validationErrorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        // Reset thông báo lỗi trước khi submit
+        validationErrorMessage = null;
+
+        // Kiểm tra các trường nếu giá trị chưa hợp lệ (trống hoặc = 0)
+        if (string.IsNullOrWhiteSpace(newProduct.Name) ||
+            newProduct.Price <= 0 ||
+            string.IsNullOrWhiteSpace(newProduct.Description) ||
+            newProduct.Quantity <= 0)
+        {
+            validationErrorMessage = "Bạn cần nhập đủ thông tin sản phẩm.";
+            return; // Ngừng submit nếu có lỗi
+        }
+
+        // Xử lý thêm sản phẩm vào cơ sở dữ liệu
+        await ProductService.AddProductAsync(newProduct);
+        
+        // Chuyển hướng về trang danh sách sản phẩm
+        NavigationManager.NavigateTo("/products");
+
+        // Reset lại form (optional)
+        newProduct = new Products();
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        // Nếu form không hợp lệ, hiển thị thông báo lỗi chung
+        validationErrorMessage = "Bạn cần nhập đủ thông tin sản phẩm.";
+    }
+}

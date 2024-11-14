@@ -3,6 +3,7 @@ using BlazorApp_Auth.Components;
 using Microsoft.EntityFrameworkCore;
 using BlazorApp_Auth.Services;
 using DevExpress.Blazor;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<UserAuthDbContext>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddBlazoredSessionStorage(); 
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

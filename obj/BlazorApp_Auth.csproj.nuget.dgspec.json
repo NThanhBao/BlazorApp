@@ -58,6 +58,14 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Blazored.LocalStorage": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            },
+            "Blazored.SessionStorage": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
             "DevExpress.Blazor": {
               "target": "Package",
               "version": "[24.1.7, )"

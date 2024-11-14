@@ -61,37 +61,39 @@
     private Users loginUser = new Users();
     string FormSubmitResult = "";
 
-    private async Task HandleLogin()
+private async Task HandleLogin()
+{
+    try
     {
-        try
+        var (isLoginSuccessful, role) = await AuthService.LoginAsync(loginUser.Username, loginUser.PasswordHash);
+
+        if (isLoginSuccessful)
         {
-            bool isLoginSuccessful = await AuthService.LoginAsync(loginUser.Username, loginUser.PasswordHash);
+            Logger.LogInformation($"User Role: {role}");
 
-            if (isLoginSuccessful)
-            {
-                // Lưu thông tin vào session
-                await SessionStorage.SetAsync("Username", loginUser.Username);
-                await SessionStorage.SetAsync("UserRole", loginUser.Role.ToString());
+            // Save the role to session storage
+            await SessionStorage.SetAsync("Username", loginUser.Username);
+            await SessionStorage.SetAsync("UserRole", role.ToString());  // Store the role in session storage
 
-                NavigationManager.NavigateTo("/"); 
-                FormSubmitResult = "You have been logged in successfully.";
-            }
-            else
-            {
-                Logger.LogWarning("Invalid login attempt.");
-                FormSubmitResult = "Invalid username or password.";
-            }
+            NavigationManager.NavigateTo("/");  // Navigate to the home page
+            FormSubmitResult = "You have been logged in successfully.";
         }
-        catch (Exception ex)
+        else
         {
-            Logger.LogError(ex, "Error during login");
-            FormSubmitResult = "An error occurred. Please try again.";
+            Logger.LogWarning("Invalid login attempt.");
+            FormSubmitResult = "Invalid username or password.";
         }
     }
+    catch (Exception ex)
+    {
+        Logger.LogError(ex, "Error during login");
+        FormSubmitResult = "An error occurred. Please try again.";
+    }
+}
 
     async Task GotoRegistrationFormClick()
     {
         FormSubmitResult = "";
-        NavigationManager.NavigateTo("/auth/register"); // Redirect to registration form
+        NavigationManager.NavigateTo("/auth/register");
     }
 }
