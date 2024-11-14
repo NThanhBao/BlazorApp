@@ -17,7 +17,12 @@
                 Create a new account to see it in action
             </p>
         </div>
-        <p class="alert alert-danger">@FormSubmitResult</p>
+        @if (FormSubmitResult != null)
+        {
+            <div class="alert alert-danger">
+                @FormSubmitResult
+            </div>
+        }
         <div class="card-body">
             <DxFormLayout>
                 <DxFormLayoutItem ColSpanMd="12">
@@ -49,7 +54,7 @@
 
                 <DxFormLayoutItem ColSpanMd="12">
                     <label for="miPhone" class="d-none">Phone Number</label>
-                    <DxMaskedInput @bind-Value="newUser.PhoneNumber" NullText="Phone Number" Mask="(999) 000-0000"
+                    <DxMaskedInput @bind-Value="newUser.PhoneNumber" NullText="Phone Number"
                         ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="miPhone" />
                     <div class="text-danger">
                         <ValidationMessage For="@(() => newUser.PhoneNumber)" />
@@ -78,7 +83,7 @@
 
 @code {
     private Users newUser = new Users();
-    private string FormSubmitResult = "";
+    private string FormSubmitResult;
 
     private async Task HandleRegister()
     {

@@ -18,7 +18,12 @@
                 Log in to see it in action
             </p>
         </div>
-        <p class="alert alert-danger">@FormSubmitResult</p>
+        @if (FormSubmitResult != null)
+        {
+            <div class="alert alert-danger">
+                @FormSubmitResult
+            </div>
+        }
         <div class="card-body">
             <DxFormLayout>
                 <DxFormLayoutItem ColSpanMd="12">
@@ -47,7 +52,7 @@
                             Do not have an account?
                         </div>
                         <DxButton Text="Create an account" RenderStyle="ButtonRenderStyle.Link"
-                            Click="GotoRegistrationFormClick" />
+                            Click="NavigateToRegister" />
                     </div>
                 </DxFormLayoutItem>
             </DxFormLayout>
@@ -57,7 +62,7 @@
 
 @code {
     private Users loginUser = new Users();
-    string FormSubmitResult = "";
+    string FormSubmitResult;
 
     private async Task HandleLogin()
     {
@@ -88,7 +93,7 @@
         }
     }
 
-    async Task GotoRegistrationFormClick()
+    private void NavigateToRegister()
     {
         FormSubmitResult = "";
         NavigationManager.NavigateTo("/auth/register");
