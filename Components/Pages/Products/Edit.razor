@@ -50,29 +50,24 @@ else
 }
 
 @code {
-    [Parameter] public int id { get; set; } // Lấy ID từ URL
+    [Parameter] public int id { get; set; }
     private Products product;
 
-    // Lấy sản phẩm theo ID khi trang được tải
     protected override async Task OnInitializedAsync()
     {
-        // Kiểm tra sản phẩm và xử lý trường hợp không tìm thấy sản phẩm
         product = await ProductService.GetProductByIdAsync(id);
         if (product == null)
         {
-            // Nếu không tìm thấy sản phẩm, chuyển hướng về trang danh sách
             NavigationManager.NavigateTo("/products");
         }
     }
 
-    // Xử lý khi người dùng nhấn nút lưu
     private async Task HandleValidSubmit()
     {
         await ProductService.EditProductAsync(product);
-        NavigationManager.NavigateTo("/products"); // Điều hướng về trang danh sách sản phẩm sau khi lưu
+        NavigationManager.NavigateTo("/products");
     }
 
-    // Hủy chỉnh sửa và quay lại trang danh sách sản phẩm
     private void CancelEdit()
     {
         NavigationManager.NavigateTo("/products");

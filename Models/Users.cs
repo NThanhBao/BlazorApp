@@ -1,13 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace BlazorApp_Auth.Models
 {
-    public enum UserRole
-    {
-        ADMIN,
-        USER
-    }
-
     public class Users
     {
         public int Id { get; set; }
@@ -15,7 +7,6 @@ namespace BlazorApp_Auth.Models
         public string PasswordHash { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-
         public DateTime DateCreated { get; set; }
         public UserRole Role { get; set; }
     }

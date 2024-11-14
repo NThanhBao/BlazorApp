@@ -23,34 +23,29 @@ else
         <p><strong>Số lượng:</strong> @product.Quantity</p>
     </div>
 
-    <!-- Confirmation buttons -->
     <button class="btn btn-danger" @onclick="DeleteProduct">Xóa</button>
     <button class="btn btn-secondary" @onclick="CancelDelete">Hủy</button>
 }
 
 @code {
-    [Parameter] public int id { get; set; } // Get ID from URL
+    [Parameter] public int id { get; set; } 
     private Products product;
 
-    // Fetch the product by ID when the page is initialized
     protected override async Task OnInitializedAsync()
     {
         product = await ProductService.GetProductByIdAsync(id);
         if (product == null)
         {
-            // Redirect to the products list if the product doesn't exist
             NavigationManager.NavigateTo("/products");
         }
     }
 
-    // Handle the delete action
     private async Task DeleteProduct()
     {
-        await ProductService.DeleteProductAsync(id); // Delete the product
-        NavigationManager.NavigateTo("/products"); // Redirect to the products list
+        await ProductService.DeleteProductAsync(id);
+        NavigationManager.NavigateTo("/products"); 
     }
 
-    // Handle the cancel action (go back to the products list)
     private void CancelDelete()
     {
         NavigationManager.NavigateTo("/products");

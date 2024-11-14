@@ -35,7 +35,7 @@
 @code {
     private bool isUserLoggedIn;
     private string username;
-    private string userRole; 
+    private string userRole;
     private string successMessage;
 
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -50,7 +50,7 @@
 
         if (isUserLoggedIn)
         {
-            username = user.Identity.Name; 
+            username = user.Identity.Name;
             userRole = user.FindFirst(c => c.Type == "UserRole")?.Value ?? "User";
         }
     }
@@ -69,10 +69,10 @@
 
                 if (storedRoleResult.Success && !string.IsNullOrEmpty(storedRoleResult.Value))
                 {
-                    userRole = storedRoleResult.Value; 
+                    userRole = storedRoleResult.Value;
                 }
 
-                StateHasChanged(); 
+                StateHasChanged();
             }
         }
     }
@@ -93,14 +93,14 @@
     }
 
     private async Task Logout()
-{
-    await SessionStorage.DeleteAsync("Username");
-    await SessionStorage.DeleteAsync("UserRole");
+    {
+        await SessionStorage.DeleteAsync("Username");
+        await SessionStorage.DeleteAsync("UserRole");
 
-    isUserLoggedIn = false;
-    username = null;
-    userRole = null;
+        isUserLoggedIn = false;
+        username = null;
+        userRole = null;
 
-    NavigationManager.NavigateTo("/"); 
-}
+        NavigationManager.NavigateTo("/");
+    }
 }

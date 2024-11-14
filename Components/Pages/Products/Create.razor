@@ -51,32 +51,26 @@
 
     private async Task HandleValidSubmit()
     {
-        // Reset thông báo lỗi trước khi submit
         validationErrorMessage = null;
 
-        // Kiểm tra các trường nếu giá trị chưa hợp lệ (trống hoặc = 0)
         if (string.IsNullOrWhiteSpace(newProduct.Name) ||
             newProduct.Price <= 0 ||
             string.IsNullOrWhiteSpace(newProduct.Description) ||
             newProduct.Quantity <= 0)
         {
             validationErrorMessage = "Bạn cần nhập đủ thông tin sản phẩm.";
-            return; // Ngừng submit nếu có lỗi
+            return;
         }
 
-        // Xử lý thêm sản phẩm vào cơ sở dữ liệu
         await ProductService.AddProductAsync(newProduct);
         
-        // Chuyển hướng về trang danh sách sản phẩm
         NavigationManager.NavigateTo("/products");
 
-        // Reset lại form (optional)
         newProduct = new Products();
     }
 
     private void HandleInvalidSubmit()
     {
-        // Nếu form không hợp lệ, hiển thị thông báo lỗi chung
         validationErrorMessage = "Bạn cần nhập đủ thông tin sản phẩm.";
     }
 }

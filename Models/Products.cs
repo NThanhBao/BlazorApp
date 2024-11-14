@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace BlazorApp_Auth.Models
 {
     public class Products

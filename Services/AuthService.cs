@@ -13,7 +13,7 @@ namespace BlazorApp_Auth.Services
             _context = context;
         }
 
-        // Phương thức đăng ký người dùng
+        // Phương thức đăng ký
         public async Task RegisterAsync(string username, string password, string email, string phoneNumber)
         {
             var existingUser = await _context.Users
@@ -45,19 +45,17 @@ namespace BlazorApp_Auth.Services
 
             if (user != null && VerifyPassword(password, user.PasswordHash))
             {
-                return (true, user.Role); // Return true and the role of the user
+                return (true, user.Role); 
             }
 
-            return (false, UserRole.USER); // Return false if login fails
+            return (false, UserRole.USER); 
         }
 
-        // Hàm mã hóa mật khẩu
         private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        // Hàm xác minh mật khẩu
         public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
             return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHash);

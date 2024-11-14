@@ -52,35 +52,29 @@ else
     private bool isAdmin = false;
     private string adminMessage = "";
     
-    // Lấy danh sách sản phẩm khi trang được tải
     protected override async Task OnInitializedAsync()
     {
         products = await ProductService.GetAllProductsAsync();
     }
 
-    // Điều hướng tới trang thêm sản phẩm
     private void AddProduct()
     {
         NavigationManager.NavigateTo("/products/create-product");
     }
 
-    // Điều hướng tới trang chỉnh sửa sản phẩm
     private async Task EditProduct()
     {
         if (selectedProduct != null && isAdmin)
         {
-            // Navigate if admin
             NavigationManager.NavigateTo($"/products/edit-product/{selectedProduct.Id}");
         }
         else
         {
-            // Show a message if not an admin or product is not selected
             adminMessage = "Bạn không phải là admin!";
-            StateHasChanged();  // Ensure the UI is updated with the message
+            StateHasChanged(); 
         }
     }
 
-    // Xử lý xóa sản phẩm
     private void DeleteProduct()
     {
         if (selectedProduct != null && isAdmin)
@@ -89,13 +83,11 @@ else
         }
         else
         {
-            // Show a message if not an admin or product is not selected
             adminMessage = "Bạn không phải là admin!";
-            StateHasChanged();  // Ensure the UI is updated with the message
+            StateHasChanged(); 
         }
     }
 
-    // Sự kiện khi người dùng nhấp vào một dòng
     private void OnRowClick(GridRowClickEventArgs e)
     {
         int visibleIndex = e.VisibleIndex;
@@ -107,12 +99,10 @@ else
         }
     }
 
-    // Phương thức kiểm tra quyền admin từ session storage
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Check admin role after the first render (to avoid statically rendering issues)
             var storedRoleResult = await SessionStorage.GetAsync<string>("UserRole");
 
             if (storedRoleResult.Success && storedRoleResult.Value == "ADMIN")
@@ -120,7 +110,6 @@ else
                 isAdmin = true;
             }
 
-            // Ensure that the UI is updated after the role is checked
             StateHasChanged();
         }
     }

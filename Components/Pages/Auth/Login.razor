@@ -71,11 +71,10 @@ private async Task HandleLogin()
         {
             Logger.LogInformation($"User Role: {role}");
 
-            // Save the role to session storage
             await SessionStorage.SetAsync("Username", loginUser.Username);
-            await SessionStorage.SetAsync("UserRole", role.ToString());  // Store the role in session storage
+            await SessionStorage.SetAsync("UserRole", role.ToString()); 
 
-            NavigationManager.NavigateTo("/");  // Navigate to the home page
+            NavigationManager.NavigateTo("/");  
             FormSubmitResult = "You have been logged in successfully.";
         }
         else

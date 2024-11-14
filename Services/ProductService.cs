@@ -28,7 +28,7 @@ namespace BlazorApp_Auth.Services
         // Thêm sản phẩm mới
         public async Task AddProductAsync(Products product)
         {
-            product.CreatedAt = DateTime.UtcNow; // Set default created date if not provided
+            product.CreatedAt = DateTime.UtcNow;
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }

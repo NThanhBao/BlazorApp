@@ -1,6 +1,5 @@
 using BlazorApp_Auth.Models;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace BlazorApp_Auth.Data
 {
@@ -51,7 +50,6 @@ namespace BlazorApp_Auth.Data
                 context.SaveChanges();
             }
 
-            // Seed Products if none exist
             if (!context.Products.Any())
             {
                 context.Products.AddRange(
