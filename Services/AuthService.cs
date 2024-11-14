@@ -30,7 +30,7 @@ namespace BlazorApp_Auth.Services
                 Email = email,
                 PhoneNumber = phoneNumber,
                 DateCreated = DateTime.UtcNow,
-                Role = UserRole.USER 
+                Role = UserRole.USER
             };
 
             _context.Users.Add(newUser);
@@ -45,10 +45,10 @@ namespace BlazorApp_Auth.Services
 
             if (user != null && VerifyPassword(password, user.PasswordHash))
             {
-                return (true, user.Role); 
+                return (true, user.Role);
             }
 
-            return (false, UserRole.USER); 
+            return (false, UserRole.USER);
         }
 
         private static string HashPassword(string password)

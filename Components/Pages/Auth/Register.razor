@@ -17,7 +17,7 @@
                 Create a new account to see it in action
             </p>
         </div>
-
+        <p class="alert alert-danger">@FormSubmitResult</p>
         <div class="card-body">
             <DxFormLayout>
                 <DxFormLayoutItem ColSpanMd="12">
@@ -74,7 +74,7 @@
     </EditForm>
 </div>
 
-<p class="tm-8 cw-480 mt-2">@FormSubmitResult</p>
+
 
 @code {
     private Users newUser = new Users();
@@ -90,7 +90,14 @@
         }
         catch (Exception ex)
         {
-            FormSubmitResult = "Registration failed. Please try again.";
+            if (ex.Message == "Username already exists.")
+            {
+                FormSubmitResult = ex.Message;
+            }
+            else
+            {
+                FormSubmitResult = "Registration failed. Please try again.";
+            }
         }
     }
 

@@ -18,6 +18,7 @@
                 Log in to see it in action
             </p>
         </div>
+        <p class="alert alert-danger">@FormSubmitResult</p>
         <div class="card-body">
             <DxFormLayout>
                 <DxFormLayoutItem ColSpanMd="12">
@@ -53,9 +54,6 @@
         </div>
     </EditForm>
 </div>
-<p class="tm-8 cw-480 mt-2">
-    @FormSubmitResult
-</p>
 
 @code {
     private Users loginUser = new Users();
