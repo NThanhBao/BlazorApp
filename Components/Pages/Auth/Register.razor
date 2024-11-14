@@ -7,27 +7,23 @@
 @inject NavigationManager NavigationManager
 
 <div class="card cw-480">
-    <EditForm Model="newUser"
-              OnValidSubmit="HandleRegister"
-              OnInvalidSubmit="HandleInvalidSubmit"
-              Context="EditFormContext">
+    <EditForm Model="newUser" OnValidSubmit="HandleRegister" OnInvalidSubmit="HandleInvalidSubmit"
+        Context="EditFormContext">
         <DataAnnotationsValidator />
-        
+
         <div class="card-header text-center py-3">
             <h4>Register</h4>
             <p class="tm-8 mb-0 fw-normal fs-825">
                 Create a new account to see it in action
             </p>
         </div>
-        
+
         <div class="card-body">
             <DxFormLayout>
                 <DxFormLayoutItem ColSpanMd="12">
                     <label for="tbUsername" class="d-none">Username</label>
-                    <DxTextBox @bind-Text="newUser.Username"
-                               NullText="Username"
-                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                               InputId="tbUsername" />
+                    <DxTextBox @bind-Text="newUser.Username" NullText="Username"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="tbUsername" />
                     <div class="text-danger">
                         <ValidationMessage For="@(() => newUser.Username)" />
                     </div>
@@ -35,11 +31,8 @@
 
                 <DxFormLayoutItem ColSpanMd="12">
                     <label for="tbPassword" class="d-none">Password</label>
-                    <DxTextBox @bind-Text="newUser.PasswordHash"
-                               NullText="Password"
-                               Password="true"
-                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                               InputId="tbPassword" />
+                    <DxTextBox @bind-Text="newUser.PasswordHash" NullText="Password" Password="true"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="tbPassword" />
                     <div class="text-danger">
                         <ValidationMessage For="@(() => newUser.PasswordHash)" />
                     </div>
@@ -47,10 +40,8 @@
 
                 <DxFormLayoutItem ColSpanMd="12">
                     <label for="tbEmail" class="d-none">E-mail</label>
-                    <DxTextBox @bind-Text="newUser.Email"
-                               NullText="E-mail"
-                               ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                               InputId="tbEmail" />
+                    <DxTextBox @bind-Text="newUser.Email" NullText="E-mail"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="tbEmail" />
                     <div class="text-danger">
                         <ValidationMessage For="@(() => newUser.Email)" />
                     </div>
@@ -58,21 +49,16 @@
 
                 <DxFormLayoutItem ColSpanMd="12">
                     <label for="miPhone" class="d-none">Phone Number</label>
-                    <DxMaskedInput @bind-Value="newUser.PhoneNumber"
-                                   NullText="Phone Number"
-                                   Mask="(999) 000-0000"
-                                   ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                   InputId="miPhone" />
+                    <DxMaskedInput @bind-Value="newUser.PhoneNumber" NullText="Phone Number" Mask="(999) 000-0000"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" InputId="miPhone" />
                     <div class="text-danger">
                         <ValidationMessage For="@(() => newUser.PhoneNumber)" />
                     </div>
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem ColSpanMd="12">
-                    <DxButton CssClass="w-100"
-                              RenderStyle="ButtonRenderStyle.Primary"
-                              SubmitFormOnClick="true"
-                              Text="Register" />
+                    <DxButton CssClass="w-100" RenderStyle="ButtonRenderStyle.Primary" SubmitFormOnClick="true"
+                        Text="Register" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem ColSpanMd="12">
@@ -80,9 +66,7 @@
                         <div class="tm-8">
                             Already have an account?
                         </div>
-                        <DxButton RenderStyle="ButtonRenderStyle.Link"
-                                  Text="Login"
-                                  Click="NavigateToLogin" />
+                        <DxButton RenderStyle="ButtonRenderStyle.Link" Text="Login" Click="NavigateToLogin" />
                     </div>
                 </DxFormLayoutItem>
             </DxFormLayout>

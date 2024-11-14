@@ -14,8 +14,10 @@
     <h3>Danh Sách Sản Phẩm</h3>
     <div>
         <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Thêm" @onclick="AddProduct" />
-        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Sửa" @onclick="EditProduct" Disabled="@(!isProductSelected || !isAdmin)" />
-        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Xóa" @onclick="DeleteProduct" Disabled="@(!isProductSelected || !isAdmin)" />
+        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Sửa" @onclick="EditProduct"
+            Disabled="@(!isProductSelected || !isAdmin)" />
+        <DxButton ButtonType="DevExpress.Blazor.ButtonType.Secondary" Text="Xóa" @onclick="DeleteProduct"
+            Disabled="@(!isProductSelected || !isAdmin)" />
     </div>
 </div>
 
@@ -25,11 +27,9 @@
 }
 else
 {
-    <DxGrid Data="@products" PageSize="15" ColumnResizeMode="GridColumnResizeMode.NextColumn" TextWrapEnabled="false" 
-            SelectionMode="GridSelectionMode.Single" 
-            RowClick="OnRowClick"
-            AllowSelectRowByClick="true"
-            HighlightRowOnHover="true">
+    <DxGrid Data="@products" PageSize="15" ColumnResizeMode="GridColumnResizeMode.NextColumn" TextWrapEnabled="false"
+        SelectionMode="GridSelectionMode.Single" RowClick="OnRowClick" AllowSelectRowByClick="true"
+        HighlightRowOnHover="true">
         <Columns>
             <DxGridDataColumn FieldName="Name" Caption="Tên Sản Phẩm" MinWidth="150" />
             <DxGridDataColumn FieldName="Description" Caption="Mô Tả" Width="30%" />
@@ -51,7 +51,7 @@ else
     private bool isProductSelected => selectedProduct != null;
     private bool isAdmin = false;
     private string adminMessage = "";
-    
+
     protected override async Task OnInitializedAsync()
     {
         products = await ProductService.GetAllProductsAsync();
@@ -71,7 +71,7 @@ else
         else
         {
             adminMessage = "Bạn không phải là admin!";
-            StateHasChanged(); 
+            StateHasChanged();
         }
     }
 
@@ -84,7 +84,7 @@ else
         else
         {
             adminMessage = "Bạn không phải là admin!";
-            StateHasChanged(); 
+            StateHasChanged();
         }
     }
 

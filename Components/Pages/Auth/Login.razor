@@ -61,34 +61,34 @@
     private Users loginUser = new Users();
     string FormSubmitResult = "";
 
-private async Task HandleLogin()
-{
-    try
+    private async Task HandleLogin()
     {
-        var (isLoginSuccessful, role) = await AuthService.LoginAsync(loginUser.Username, loginUser.PasswordHash);
-
-        if (isLoginSuccessful)
+        try
         {
-            Logger.LogInformation($"User Role: {role}");
+            var (isLoginSuccessful, role) = await AuthService.LoginAsync(loginUser.Username, loginUser.PasswordHash);
 
-            await SessionStorage.SetAsync("Username", loginUser.Username);
-            await SessionStorage.SetAsync("UserRole", role.ToString()); 
+            if (isLoginSuccessful)
+            {
+                Logger.LogInformation($"User Role: {role}");
 
-            NavigationManager.NavigateTo("/");  
-            FormSubmitResult = "You have been logged in successfully.";
+                await SessionStorage.SetAsync("Username", loginUser.Username);
+                await SessionStorage.SetAsync("UserRole", role.ToString());
+
+                NavigationManager.NavigateTo("/");
+                FormSubmitResult = "You have been logged in successfully.";
+            }
+            else
+            {
+                Logger.LogWarning("Invalid login attempt.");
+                FormSubmitResult = "Invalid username or password.";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogWarning("Invalid login attempt.");
-            FormSubmitResult = "Invalid username or password.";
+            Logger.LogError(ex, "Error during login");
+            FormSubmitResult = "An error occurred. Please try again.";
         }
     }
-    catch (Exception ex)
-    {
-        Logger.LogError(ex, "Error during login");
-        FormSubmitResult = "An error occurred. Please try again.";
-    }
-}
 
     async Task GotoRegistrationFormClick()
     {

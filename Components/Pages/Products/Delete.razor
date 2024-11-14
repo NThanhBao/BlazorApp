@@ -28,7 +28,7 @@ else
 }
 
 @code {
-    [Parameter] public int id { get; set; } 
+    [Parameter] public int id { get; set; }
     private Products product;
 
     protected override async Task OnInitializedAsync()
@@ -43,7 +43,7 @@ else
     private async Task DeleteProduct()
     {
         await ProductService.DeleteProductAsync(id);
-        NavigationManager.NavigateTo("/products"); 
+        NavigationManager.NavigateTo("/products");
     }
 
     private void CancelDelete()

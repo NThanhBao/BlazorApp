@@ -54,16 +54,16 @@
         validationErrorMessage = null;
 
         if (string.IsNullOrWhiteSpace(newProduct.Name) ||
-            newProduct.Price <= 0 ||
-            string.IsNullOrWhiteSpace(newProduct.Description) ||
-            newProduct.Quantity <= 0)
+        newProduct.Price <= 0 ||
+        string.IsNullOrWhiteSpace(newProduct.Description) ||
+        newProduct.Quantity <= 0)
         {
             validationErrorMessage = "Bạn cần nhập đủ thông tin sản phẩm.";
             return;
         }
 
         await ProductService.AddProductAsync(newProduct);
-        
+
         NavigationManager.NavigateTo("/products");
 
         newProduct = new Products();
