@@ -162,3 +162,8 @@ E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Swashbu
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\obj\Debug\net8.0\BlazorApp_Auth.MvcApplicationPartsAssemblyInfo.cs
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+E:\NTB Source Code\Dotnet\BlazorApp_Auth\BlazorApp_Auth\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
